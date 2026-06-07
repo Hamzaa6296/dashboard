@@ -52,16 +52,6 @@
 
 ---
 
-## 🎬 Demo Video
-
-> 📌 **To add a video:** record a short screen recording (30–60 seconds), upload it to YouTube or Loom (free), then paste the link below.
-
-[![Watch Demo](https://img.shields.io/badge/▶_Watch_Demo-FF0000?style=for-the-badge&logo=youtube&logoColor=white)](https://your-demo-link-here)
-
-Or paste your Loom/YouTube link directly here.
-
----
-
 ## 🛠️ Tech Stack
 
 ### Frontend
