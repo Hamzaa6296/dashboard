@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 import api from "../utils/api";
 import { useAuth } from "../context/AuthContext";
+import { createPortal } from "react-dom";
 
 const STATUS_COLORS = {
   active: {
@@ -34,6 +35,7 @@ const STATUS_COLORS = {
     border: "rgba(95,95,122,0.3)",
   },
 };
+
 const PRIORITY_COLORS = {
   critical: "var(--red)",
   high: "var(--orange)",
@@ -164,6 +166,7 @@ function ProjectModal({ project, onClose, onSave }) {
     fontSize: 14,
     outline: "none",
   };
+
   const labelStyle = {
     fontSize: 13,
     fontWeight: 500,
@@ -182,8 +185,10 @@ function ProjectModal({ project, onClose, onSave }) {
         alignItems: "center",
         justifyContent: "center",
         zIndex: 200,
-        padding: 20,
+        overflowY: "auto",
+        padding: "20px",
       }}
+      onClick={onClose}
     >
       <div
         style={{
@@ -192,11 +197,14 @@ function ProjectModal({ project, onClose, onSave }) {
           borderRadius: "var(--radius-lg)",
           width: "100%",
           maxWidth: 540,
-          maxHeight: "90vh",
+          maxHeight: "85vh",
           overflowY: "auto",
+          margin: "auto",
+          flexShrink: 0,
         }}
         onClick={(e) => e.stopPropagation()}
       >
+        {/* Modal Header */}
         <div
           style={{
             display: "flex",
@@ -204,6 +212,10 @@ function ProjectModal({ project, onClose, onSave }) {
             alignItems: "center",
             padding: "20px 24px",
             borderBottom: "1px solid var(--border)",
+            position: "sticky",
+            top: 0,
+            background: "var(--bg-1)",
+            zIndex: 1,
           }}
         >
           <h2 style={{ fontFamily: "Syne", fontSize: 20, fontWeight: 700 }}>
@@ -216,12 +228,17 @@ function ProjectModal({ project, onClose, onSave }) {
               border: "none",
               color: "var(--text-2)",
               padding: 4,
+              cursor: "pointer",
+              display: "flex",
+              alignItems: "center",
+              borderRadius: 6,
             }}
           >
             <X size={20} />
           </button>
         </div>
 
+        {/* Modal Form */}
         <form
           onSubmit={handleSubmit}
           style={{
@@ -273,7 +290,11 @@ function ProjectModal({ project, onClose, onSave }) {
           </div>
 
           <div
-            style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}
+            style={{
+              display: "grid",
+              gridTemplateColumns: "1fr 1fr",
+              gap: 12,
+            }}
           >
             <div>
               <label style={labelStyle}>Status</label>
@@ -306,7 +327,11 @@ function ProjectModal({ project, onClose, onSave }) {
           </div>
 
           <div
-            style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}
+            style={{
+              display: "grid",
+              gridTemplateColumns: "1fr 1fr",
+              gap: 12,
+            }}
           >
             <div>
               <label style={labelStyle}>Due Date</label>
@@ -366,6 +391,7 @@ function ProjectModal({ project, onClose, onSave }) {
                 borderRadius: "var(--radius-sm)",
                 color: "var(--text-2)",
                 fontSize: 14,
+                cursor: "pointer",
               }}
             >
               Cancel
@@ -385,6 +411,7 @@ function ProjectModal({ project, onClose, onSave }) {
                 display: "flex",
                 alignItems: "center",
                 gap: 6,
+                cursor: "pointer",
               }}
             >
               {loading && (
@@ -406,7 +433,7 @@ export default function Projects() {
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [filterStatus, setFilterStatus] = useState("");
-  const [modal, setModal] = useState(null); // null | 'create' | project object
+  const [modal, setModal] = useState(null);
   const [deleteId, setDeleteId] = useState(null);
 
   const fetchProjects = useCallback(
@@ -482,6 +509,7 @@ export default function Projects() {
             borderRadius: "var(--radius-sm)",
             fontSize: 14,
             fontWeight: 500,
+            cursor: "pointer",
           }}
         >
           <Plus size={16} /> New Project
@@ -490,7 +518,12 @@ export default function Projects() {
 
       {/* Filters */}
       <div
-        style={{ display: "flex", gap: 12, marginBottom: 24, flexWrap: "wrap" }}
+        style={{
+          display: "flex",
+          gap: 12,
+          marginBottom: 24,
+          flexWrap: "wrap",
+        }}
       >
         <div style={{ position: "relative", flex: 1, minWidth: 200 }}>
           <Search
@@ -719,6 +752,7 @@ export default function Projects() {
                             color: "var(--text-2)",
                             display: "flex",
                             alignItems: "center",
+                            cursor: "pointer",
                           }}
                         >
                           <Edit2 size={14} />
@@ -736,6 +770,7 @@ export default function Projects() {
                                   color: "var(--red)",
                                   display: "flex",
                                   alignItems: "center",
+                                  cursor: "pointer",
                                 }}
                               >
                                 <Check size={14} />
@@ -750,6 +785,7 @@ export default function Projects() {
                                   color: "var(--text-2)",
                                   display: "flex",
                                   alignItems: "center",
+                                  cursor: "pointer",
                                 }}
                               >
                                 <X size={14} />
@@ -766,6 +802,7 @@ export default function Projects() {
                                 color: "var(--text-3)",
                                 display: "flex",
                                 alignItems: "center",
+                                cursor: "pointer",
                               }}
                             >
                               <Trash2 size={14} />
@@ -808,6 +845,7 @@ export default function Projects() {
                   alignItems: "center",
                   gap: 4,
                   fontSize: 13,
+                  cursor: pagination.page <= 1 ? "not-allowed" : "pointer",
                 }}
               >
                 <ChevronLeft size={14} /> Prev
@@ -828,6 +866,10 @@ export default function Projects() {
                   alignItems: "center",
                   gap: 4,
                   fontSize: 13,
+                  cursor:
+                    pagination.page >= pagination.pages
+                      ? "not-allowed"
+                      : "pointer",
                 }}
               >
                 Next <ChevronRight size={14} />
@@ -837,14 +879,16 @@ export default function Projects() {
         )}
       </div>
 
-      {/* Modals */}
-      {(modal === "create" || (modal && typeof modal === "object")) && (
-        <ProjectModal
-          project={modal === "create" ? null : modal}
-          onClose={() => setModal(null)}
-          onSave={() => fetchProjects(pagination.page)}
-        />
-      )}
+      {/* Modal */}
+      {(modal === "create" || (modal && typeof modal === "object")) &&
+        createPortal(
+          <ProjectModal
+            project={modal === "create" ? null : modal}
+            onClose={() => setModal(null)}
+            onSave={() => fetchProjects(pagination.page)}
+          />,
+          document.body,
+        )}
     </div>
   );
 }

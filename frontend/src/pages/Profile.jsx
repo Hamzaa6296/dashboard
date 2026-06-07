@@ -338,6 +338,8 @@ export default function Profile() {
                 marginTop: -40,
                 marginBottom: 16,
                 border: "3px solid var(--bg-1)",
+                position: "relative",
+                zIndex: "1",
               }}
             >
               {initials}
